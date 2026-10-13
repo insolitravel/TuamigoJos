@@ -143,7 +143,7 @@ color-scheme:only light;
   .calc-panel .wrap{max-height:85vh;overflow-y:auto}
   .calc-panel .wrap{pointer-events:auto}
   .calc-panel.open{display:block}
-  .calc-panel-close{position:absolute;top:-18px;left:20px;z-index:56;display:flex;align-items:center;justify-content:center;padding:0;background:rgba(42,42,42,.7);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:50%;width:40px;height:40px;box-shadow:0 3px 10px rgba(0,0,0,.4);pointer-events:auto;backdrop-filter:blur(4px)}
+  .calc-panel-close{position:absolute;top:-18px;right:20px;z-index:56;display:flex;align-items:center;justify-content:center;padding:0;background:rgba(42,42,42,.7);border:1px solid rgba(255,255,255,.25);color:#fff;border-radius:50%;width:40px;height:40px;box-shadow:0 3px 10px rgba(0,0,0,.4);pointer-events:auto;backdrop-filter:blur(4px)}
   .calc-bar{position:relative;background:#d9cdb2;backdrop-filter:blur(6px);border:1px solid #b8a983;border-radius:16px;padding:16px 18px;margin:0 10px 24px;display:flex;flex-direction:column;align-items:stretch;gap:14px;box-shadow:0 8px 28px rgba(0,0,0,.4)}
   .calc-left{display:flex;flex-direction:column;align-items:center;gap:10px;width:100%}
   .calc-left-row1{display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap;width:100%}
@@ -685,7 +685,7 @@ color-scheme:only light;
 </button>
 
 <div class="calc-panel" id="calc-panel">
-  <button class="calc-panel-close" id="calc-panel-close" type="button" aria-label="Volver"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4 7 12l8 8"/></svg></button>
+  <button class="calc-panel-close" id="calc-panel-close" type="button" aria-label="Cerrar"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6 18 18M18 6 6 18"/></svg></button>
   <div class="wrap">
     <div class="calc-bar">
       <div class="calc-left">
