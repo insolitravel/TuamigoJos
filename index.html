@@ -308,6 +308,7 @@ color-scheme:only light;
   .modal-box .inc-panel ol.inc-steps li::before{content:counter(paso);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:#cdd1d4;color:#484848;font-size:12px;font-weight:700;line-height:22px;text-align:center}
   .modal-box .inc-panel p.inc-nota{text-align:justify;margin:18px 0 12px;padding:0;background:none;font-size:14px;line-height:1.55;font-weight:700;color:#484848}
   .modal-box .inc-panel .modal-fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin:0 0 14px}
+  .modal-box .inc-panel .ruta-map{width:100%;height:280px;border-radius:12px;margin:0 0 14px;z-index:0}
   .modal-box .inc-panel .modal-fotos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;cursor:pointer;transition:transform .12s ease-out}
   .modal-box .inc-panel .modal-fotos img:active{transform:scale(.95)}
   @media(hover:hover){.modal-box .inc-panel .modal-fotos img:hover{transform:scale(1.04)}}
@@ -338,6 +339,8 @@ color-scheme:only light;
   .splash-lang-switch button{background:#f1f1ee;border:1px solid #dcdcd6;border-radius:8px;width:36px;height:30px;font-size:17px;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;opacity:.6}
   .splash-lang-switch button.active{background:#e6e6de;border-color:#c9a24b;opacity:1}
 </style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 </head>
 <body>
 <div class="splash-overlay" id="splash-overlay">
@@ -1823,6 +1826,7 @@ const UI_STRINGS = {
   "modalNoIncluye": "No incluye",
   "modalRecomendaciones": "Recomendaciones",
   "modalFotos": "Fotos",
+  "modalRuta": "Ver el recorrido",
   "modalSimilares": "Actividades similares a esta",
   "waIntro": "Hola, quiero reservar los siguientes tours:",
   "waPersonas": "Personas",
@@ -1892,6 +1896,7 @@ const UI_STRINGS = {
   "modalNoIncluye": "Not included",
   "modalRecomendaciones": "Recommendations",
   "modalFotos": "Photos",
+  "modalRuta": "View the route",
   "modalSimilares": "Similar activities",
   "waIntro": "Hi, I'd like to book the following tours:",
   "waPersonas": "People",
@@ -1961,6 +1966,7 @@ const UI_STRINGS = {
   "modalNoIncluye": "Non inclus",
   "modalRecomendaciones": "Recommandations",
   "modalFotos": "Photos",
+  "modalRuta": "Voir le parcours",
   "modalSimilares": "Activités similaires",
   "waIntro": "Bonjour, je souhaite réserver les circuits suivants :",
   "waPersonas": "Personnes",
@@ -2199,6 +2205,7 @@ const TOUR_SIMILARES = {
   'canyoning': ['cueva-momias','cueva-navidad']
 };
 const TOUR_SIM_FOTO = { 'cueva-navidad': 3 };
+const TOUR_RUTAS = { 'cueva-navidad': [[-18.139328,-65.760701],[-18.139295,-65.760078],[-18.13921,-65.75943],[-18.138813,-65.759018],[-18.138305,-65.758753],[-18.138142,-65.758576],[-18.137909,-65.758571],[-18.137605,-65.75859],[-18.137596,-65.758416],[-18.137566,-65.758315],[-18.137575,-65.758354],[-18.137457,-65.758175],[-18.137174,-65.758015],[-18.137015,-65.757852],[-18.137002,-65.757637],[-18.136967,-65.757668],[-18.137001,-65.757673],[-18.136997,-65.757659],[-18.137007,-65.757658],[-18.136969,-65.757539],[-18.136832,-65.757295],[-18.136766,-65.757117],[-18.136817,-65.756935],[-18.136862,-65.75676],[-18.13684,-65.756484],[-18.136823,-65.756268],[-18.136875,-65.756037],[-18.136849,-65.755962],[-18.136835,-65.755958],[-18.136816,-65.755939],[-18.136831,-65.75594],[-18.136858,-65.755931],[-18.136809,-65.755902],[-18.136752,-65.7557],[-18.136661,-65.755555],[-18.136611,-65.755357],[-18.136627,-65.75516],[-18.136617,-65.754989],[-18.136565,-65.754784],[-18.136703,-65.754573],[-18.136703,-65.754521],[-18.136724,-65.754504],[-18.136711,-65.754511],[-18.136725,-65.754528],[-18.136707,-65.754515],[-18.136715,-65.754528],[-18.136713,-65.754562],[-18.136681,-65.754627],[-18.136683,-65.75464],[-18.136655,-65.754556],[-18.136709,-65.754544],[-18.13684,-65.754374],[-18.136766,-65.754256],[-18.136615,-65.754162],[-18.136644,-65.754047],[-18.136561,-65.753928],[-18.136569,-65.753782],[-18.136555,-65.753814],[-18.136536,-65.753797],[-18.136541,-65.75382],[-18.136529,-65.753704],[-18.136506,-65.753582],[-18.136439,-65.7535],[-18.136412,-65.753492],[-18.136442,-65.753532],[-18.136448,-65.753498],[-18.136446,-65.753455],[-18.136456,-65.753486],[-18.136452,-65.75344],[-18.136461,-65.753428],[-18.136428,-65.753466],[-18.136434,-65.753481],[-18.136428,-65.75347],[-18.136415,-65.753491],[-18.136432,-65.753496],[-18.13643,-65.753496],[-18.136375,-65.753493],[-18.136442,-65.753495],[-18.136515,-65.753342],[-18.136578,-65.753188],[-18.136533,-65.753062],[-18.136511,-65.752888],[-18.136555,-65.752797],[-18.136673,-65.752506],[-18.136644,-65.752289],[-18.136587,-65.752253],[-18.136647,-65.752062],[-18.136782,-65.751879],[-18.136956,-65.751712],[-18.136939,-65.751715],[-18.136962,-65.751715],[-18.136941,-65.751747],[-18.136949,-65.751732],[-18.136947,-65.751683],[-18.136954,-65.751709],[-18.136939,-65.7517],[-18.136916,-65.751744],[-18.136935,-65.751751],[-18.136931,-65.751721],[-18.136929,-65.751722],[-18.136941,-65.751745],[-18.136957,-65.751705],[-18.136957,-65.751705],[-18.136933,-65.751718],[-18.136937,-65.751671],[-18.136823,-65.751582],[-18.136728,-65.751434],[-18.136724,-65.751266],[-18.136986,-65.751212],[-18.136992,-65.751097],[-18.137054,-65.751118],[-18.137327,-65.751182],[-18.137503,-65.751178],[-18.137739,-65.751131],[-18.137966,-65.751123],[-18.138192,-65.751112],[-18.138267,-65.751125],[-18.138252,-65.751122],[-18.138257,-65.751122],[-18.138286,-65.751103],[-18.138374,-65.751067],[-18.138552,-65.751],[-18.138708,-65.750743],[-18.138751,-65.750495],[-18.138809,-65.75044],[-18.138784,-65.750448],[-18.138772,-65.750454],[-18.13878,-65.750467],[-18.138792,-65.750449],[-18.138767,-65.750459],[-18.138775,-65.750457],[-18.138759,-65.750464],[-18.138774,-65.750444],[-18.138769,-65.750473],[-18.138779,-65.750438],[-18.138786,-65.750445],[-18.138801,-65.75045],[-18.138813,-65.750439],[-18.138809,-65.750424],[-18.138798,-65.75044],[-18.138812,-65.750437],[-18.138824,-65.750445],[-18.138829,-65.750418],[-18.138813,-65.750426],[-18.138813,-65.750424],[-18.138822,-65.750448],[-18.138831,-65.750422],[-18.138774,-65.750404],[-18.138773,-65.750408],[-18.138796,-65.750432],[-18.138716,-65.750432],[-18.138741,-65.750383]] };
 function buildSimilares(slug, ui){
   const lista = (TOUR_SIMILARES[slug] || []).filter(sl => TOUR_INFO[currentLang][sl] && TOUR_FOTOS[sl] && TOUR_FOTOS[sl].length);
   if(!lista.length) return '';
@@ -2207,6 +2214,23 @@ function buildSimilares(slug, ui){
     return `<button type="button" class="sim-card" data-sim="${sl}"><img src="${TOUR_FOTOS[sl][TOUR_SIM_FOTO[sl] || 0]}" alt=""><span class="sim-meta">⏱ ${inf.duracion}</span><span class="sim-name">${inf.titulo}</span></button>`;
   }).join('');
   return `<div class="sim-title">${ui.modalSimilares}</div><div class="sim-row">${cards}</div>`;
+}
+let rutaMapInstance = null;
+function initRutaMap(slug){
+  const coords = TOUR_RUTAS[slug];
+  if(!coords || !coords.length) return;
+  const el = document.getElementById('ruta-map');
+  if(!el) return;
+  if(rutaMapInstance){ rutaMapInstance.remove(); rutaMapInstance = null; }
+  rutaMapInstance = L.map('ruta-map', {scrollWheelZoom:false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 18,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(rutaMapInstance);
+  const line = L.polyline(coords, {color:'#b5531c', weight:4}).addTo(rutaMapInstance);
+  L.circleMarker(coords[0], {radius:6, color:'#2e7d32', fillColor:'#2e7d32', fillOpacity:1}).addTo(rutaMapInstance);
+  L.circleMarker(coords[coords.length-1], {radius:6, color:'#b5531c', fillColor:'#b5531c', fillOpacity:1}).addTo(rutaMapInstance);
+  rutaMapInstance.fitBounds(line.getBounds(), {padding:[20,20]});
 }
 function renderModal(slug){
   const info = TOUR_INFO[currentLang][slug];
@@ -2232,9 +2256,16 @@ function renderModal(slug){
     html += `<h4 class="inc-title">${ui.modalFotos}</h4>`;
     html += `<div class="modal-fotos">${fotos.map((src,i) => `<img src="${src}" data-idx="${i}" loading="lazy" alt="">`).join('')}</div>`;
   }
+  if(TOUR_RUTAS[slug]){
+    html += `<h4 class="inc-title">${ui.modalRuta}</h4>`;
+    html += `<div id="ruta-map" class="ruta-map"></div>`;
+  }
   html += buildSimilares(slug, ui);
   html += `</div>`;
   document.getElementById('modal-content').innerHTML = html;
+  if(TOUR_RUTAS[slug]){
+    setTimeout(() => initRutaMap(slug), 0);
+  }
   document.querySelectorAll('.sim-card').forEach(btn => {
     btn.addEventListener('click', () => {
       renderModal(btn.dataset.sim);
