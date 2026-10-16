@@ -309,6 +309,10 @@ color-scheme:only light;
   .modal-box .inc-panel p.inc-nota{text-align:justify;margin:18px 0 12px;padding:0;background:none;font-size:14px;line-height:1.55;font-weight:700;color:#484848}
   .modal-box .inc-panel .modal-fotos{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:8px;margin:0 0 14px}
   .modal-box .inc-panel .ruta-map{width:100%;height:280px;border-radius:12px;margin:0 0 14px;z-index:0}
+  .ruta-map.ruta-map-fullscreen{position:fixed;top:0;left:0;width:100vw!important;height:100vh!important;z-index:99999;border-radius:0;margin:0}
+  body.ruta-map-noscroll{overflow:hidden}
+  .ruta-map-fullscreen-btn{width:34px;height:34px;background:#fff;border:2px solid rgba(0,0,0,.2);border-radius:4px;cursor:pointer;font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;padding:0}
+  .ruta-map-fullscreen-btn:hover{background:#f4f4f4}
   .modal-box .inc-panel .modal-fotos img{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:10px;cursor:pointer;transition:transform .12s ease-out}
   .modal-box .inc-panel .modal-fotos img:active{transform:scale(.95)}
   @media(hover:hover){.modal-box .inc-panel .modal-fotos img:hover{transform:scale(1.04)}}
@@ -641,7 +645,7 @@ color-scheme:only light;
 
   <div class="info-card gift-card" id="gift-card">
     <button type="button" class="gift-toggle" id="gift-toggle" aria-expanded="false">
-      <span data-i18n="giftTitle">🎁 Tu Regalo InsoliTravel</span>
+      <span data-i18n="giftTitle">🎁 Elegí tu Bono de Aventura</span>
       <span class="cond-arrow gift-arrow"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 6 12 12 18 6"/><polyline points="6 13 12 19 18 13"/></svg></span>
     </button>
     <div class="cond-panel gift-panel" id="gift-panel">
@@ -659,9 +663,9 @@ color-scheme:only light;
         <p data-i18n="infoP1">Los tours contratados con José deberán ser confirmados con al menos más de 24 horas de anticipación a la fecha de la actividad.</p>
         <p data-i18n="infoP2">Una vez confirmada la reserva, el servicio tendrá carácter de tour local privado, manteniéndose el número de participantes registrado desde el inicio hasta la finalización de las actividades. No se incorporarán otros participantes.</p>
         <p data-i18n="infoP3">El servicio se prestará conforme a las condiciones y políticas internas de operación, respetando la normativa turística vigente de Torotoro. Antes de confirmar la reserva, el cliente deberá verificar claramente qué servicios están incluidos y cuáles no están incluidos en el precio acordado.</p>
-        <p data-i18n="infoP4">La confirmación de la reserva implica la aceptación de estas condiciones por ambas partes.</p>
         <p data-i18n="infoP5">Las actividades incluyen caminatas, senderos naturales y actividades de aventura en terreno agreste, cuya participación implica riesgos propios de la naturaleza del entorno. El cliente participa bajo su propia responsabilidad y declara estar en condiciones físicas adecuadas para la actividad contratada.</p>
         <p data-i18n="infoP6">El seguro de accidentes o de viaje no está incluido en el precio de ningún tour y queda a responsabilidad del cliente contratarlo si así lo desea, especialmente en las actividades de mayor riesgo, como las cuevas y el canyoning.</p>
+        <p data-i18n="infoP4">La confirmación de la reserva implica la aceptación de estas condiciones por ambas partes.</p>
       </div>
     </div>
     <p class="info-p-parque" data-i18n="avisoParque">No incluye el pago único de ticket de ingreso al parque. Se paga aparte.</p>
@@ -849,7 +853,7 @@ const TOUR_INFO = {
       "Equipo de seguridad adicional que porta el guía: botiquín de primeros auxilios y cuerda"
     ],
     "noIncluye": [
-      "Almuerzo, bebidas y otros gastos personales no mencionados"
+      "Almuerzo (picnic libre con comida que traés desde Torotoro, o almuerzo en las Cabañas Umajalanta con reserva previa), bebidas y otros gastos personales no mencionados"
     ],
     "recomendaciones": [
       "Llevar agua desde Torotoro, ya que no hay tiendas en el camino",
@@ -860,7 +864,8 @@ const TOUR_INFO = {
       "Llevar calzado con suela de goma antideslizante para las cuevas",
       "Llevar chaqueta abrigada, por la altura (cerca de 3.800 metros sobre el nivel del mar), el viento y el frío",
       "Llevar snack y pastillas energizantes",
-      "En época de lluvia: llevar chaqueta impermeable"
+      "En época de lluvia: llevar chaqueta impermeable",
+      "Si elegís almorzar en las Cabañas Umajalanta, hacer la reserva esa misma mañana antes de iniciar el tour, ya que sin aviso previo no preparan comida"
     ],
     "nota": "Este tour alcanza cerca de 3.800 metros sobre el nivel del mar. Si venís de zonas bajas (como Países Bajos, regiones costeras o la Amazonía), es recomendable llegar con uno o dos días de anticipación para aclimatarte, y considerar llevar pastillas para el mal de altura (soroche) para reducir el riesgo."
   },
@@ -1187,7 +1192,7 @@ const TOUR_INFO = {
       "Additional safety equipment carried by the guide: first aid kit and rope"
     ],
     "noIncluye": [
-      "Lunch, drinks and other personal expenses not mentioned"
+      "Lunch (free picnic with food brought from Torotoro, or lunch at Cabañas Umajalanta with advance reservation), drinks and other personal expenses not mentioned"
     ],
     "recomendaciones": [
       "Bring water from Torotoro, as there are no shops along the way",
@@ -1198,7 +1203,8 @@ const TOUR_INFO = {
       "Bring footwear with non-slip rubber soles for the caves",
       "Bring a warm jacket, due to the altitude (around 3,800 meters above sea level), wind and cold",
       "Bring snacks and energy tablets",
-      "In the rainy season: bring a waterproof jacket"
+      "In the rainy season: bring a waterproof jacket",
+      "If you choose to have lunch at Cabañas Umajalanta, make the reservation that same morning before starting the tour, since without advance notice they won't prepare food"
     ],
     "nota": "This tour reaches close to 3,800 meters above sea level. If you're coming from low-altitude areas (such as the Netherlands, coastal regions or the Amazon), it's recommended to arrive one or two days early to acclimatize, and to consider bringing altitude sickness tablets to reduce the risk."
   },
@@ -1525,7 +1531,7 @@ const TOUR_INFO = {
       "Équipement de sécurité supplémentaire porté par le guide : trousse de premiers secours et corde"
     ],
     "noIncluye": [
-      "Déjeuner, boissons et autres dépenses personnelles non mentionnées"
+      "Déjeuner (pique-nique libre avec de la nourriture apportée depuis Torotoro, ou déjeuner aux Cabañas Umajalanta sur réservation préalable), boissons et autres dépenses personnelles non mentionnées"
     ],
     "recomendaciones": [
       "Apporter de l'eau depuis Torotoro, car il n'y a pas de commerces en chemin",
@@ -1536,7 +1542,8 @@ const TOUR_INFO = {
       "Apporter des chaussures à semelle antidérapante pour les grottes",
       "Apporter une veste chaude, en raison de l'altitude (environ 3 800 mètres au-dessus du niveau de la mer), du vent et du froid",
       "Apporter des collations et comprimés énergétiques",
-      "En saison des pluies : apporter une veste imperméable"
+      "En saison des pluies : apporter une veste imperméable",
+      "Si vous choisissez de déjeuner aux Cabañas Umajalanta, faites la réservation ce même matin avant le début du circuit, car sans préavis le repas n'est pas préparé"
     ],
     "nota": "Ce circuit atteint près de 3 800 mètres d'altitude. Si vous venez de régions de basse altitude (comme les Pays-Bas, des zones côtières ou l'Amazonie), il est recommandé d'arriver un ou deux jours à l'avance pour vous acclimater, et d'envisager d'apporter des comprimés contre le mal d'altitude pour réduire le risque."
   },
@@ -1792,7 +1799,7 @@ const UI_STRINGS = {
   "badgeExtreme": "Aventura<br>Extrema",
   "verTour": "Ver el tour",
   "verFotos": "Ver fotos",
-    "giftTitle": "🎁 Tu Regalo InsoliTravel",
+    "giftTitle": "🎁 Elegí tu Bono de Aventura",
   "giftIntro": "En los tours de 2 o 3 días, cada grupo recibe un regalo incluido sin costo adicional. Elige una de estas opciones al reservar:",
   "giftOpt1": "🌙 Caminata nocturna",
   "giftOpt2": "🔥 Noche de fogata con música en vivo (charango y guitarra)",
@@ -1801,7 +1808,7 @@ const UI_STRINGS = {
   "giftOpt5": "😴 Prefiero no tomar el regalo, solo descansar",
   "valNoTour": "Por favor selecciona al menos un tour antes de enviar tu reserva.",
   "valNoFecha": "Por favor selecciona la fecha antes de enviar tu reserva.",
-  "valNoGift": "Por favor elige una opción de tu regalo InsoliTravel antes de enviar tu reserva.",
+  "valNoGift": "Por favor elige una opción de tu bono de aventura antes de enviar tu reserva.",
   "giftNote": "La opción elegida debe avisarse con anticipación al momento de reservar, para poder organizarla.",
 "infoTitle": "Condiciones del servicio",
   "infoP1": "Los tours contratados con José deberán ser confirmados con al menos más de 24 horas de anticipación a la fecha de la actividad.",
@@ -1862,7 +1869,7 @@ const UI_STRINGS = {
   "badgeExtreme": "Extreme<br>Adventure",
   "verTour": "View tour",
   "verFotos": "View photos",
-    "giftTitle": "🎁 Your InsoliTravel Gift",
+    "giftTitle": "🎁 Choose your Adventure Bonus",
   "giftIntro": "On 2- or 3-day tours, each group gets a free gift included at no extra cost. Choose one of these options when booking:",
   "giftOpt1": "🌙 Night hike",
   "giftOpt2": "🔥 Bonfire night with live music (charango and guitar)",
@@ -1871,7 +1878,7 @@ const UI_STRINGS = {
   "giftOpt5": "😴 I'd rather skip the gift and just rest",
   "valNoTour": "Please select at least one tour before sending your booking.",
   "valNoFecha": "Please select a date before sending your booking.",
-  "valNoGift": "Please choose an option for your InsoliTravel gift before sending your booking.",
+  "valNoGift": "Please choose an option for your adventure bonus before sending your booking.",
   "giftNote": "The chosen option must be confirmed in advance when booking, so it can be arranged.",
 "infoTitle": "Terms of Service",
   "infoP1": "Tours booked with José must be confirmed at least 24 hours before the date of the activity.",
@@ -1932,7 +1939,7 @@ const UI_STRINGS = {
   "badgeExtreme": "Aventure<br>extrême",
   "verTour": "Voir le circuit",
   "verFotos": "Voir les photos",
-    "giftTitle": "🎁 Votre cadeau InsoliTravel",
+    "giftTitle": "🎁 Choisissez votre Bonus Aventure",
   "giftIntro": "Pour les circuits de 2 ou 3 jours, chaque groupe reçoit un cadeau inclus sans frais supplémentaires. Choisissez une de ces options au moment de la réservation :",
   "giftOpt1": "🌙 Randonnée nocturne",
   "giftOpt2": "🔥 Soirée feu de camp avec musique live (charango et guitare)",
@@ -1941,7 +1948,7 @@ const UI_STRINGS = {
   "giftOpt5": "😴 Je préfère ne pas prendre le cadeau, juste me reposer",
   "valNoTour": "Veuillez sélectionner au moins un circuit avant d'envoyer votre réservation.",
   "valNoFecha": "Veuillez sélectionner une date avant d'envoyer votre réservation.",
-  "valNoGift": "Veuillez choisir une option pour votre cadeau InsoliTravel avant d'envoyer votre réservation.",
+  "valNoGift": "Veuillez choisir une option pour votre bonus aventure avant d'envoyer votre réservation.",
   "giftNote": "L'option choisie doit être confirmée à l'avance lors de la réservation, afin de pouvoir l'organiser.",
 "infoTitle": "Conditions du service",
   "infoP1": "Les circuits réservés avec José doivent être confirmés au moins 24 heures avant la date de l'activité.",
@@ -2234,6 +2241,25 @@ function initRutaMap(slug){
   L.circleMarker(coords[0], {radius:6, color:'#2e7d32', fillColor:'#2e7d32', fillOpacity:1}).addTo(rutaMapInstance);
   L.circleMarker(coords[coords.length-1], {radius:6, color:'#b5531c', fillColor:'#b5531c', fillOpacity:1}).addTo(rutaMapInstance);
   rutaMapInstance.fitBounds(line.getBounds(), {padding:[20,20]});
+  const FullscreenControl = L.Control.extend({
+    options: {position: 'topright'},
+    onAdd: function(){
+      const btn = L.DomUtil.create('button', 'ruta-map-fullscreen-btn');
+      btn.type = 'button';
+      btn.innerHTML = '⛶';
+      btn.setAttribute('aria-label', 'Pantalla completa');
+      L.DomEvent.disableClickPropagation(btn);
+      L.DomEvent.on(btn, 'click', () => toggleRutaMapFullscreen(el, btn));
+      return btn;
+    }
+  });
+  rutaMapInstance.addControl(new FullscreenControl());
+}
+function toggleRutaMapFullscreen(el, btn){
+  const isFull = el.classList.toggle('ruta-map-fullscreen');
+  btn.innerHTML = isFull ? '✕' : '⛶';
+  document.body.classList.toggle('ruta-map-noscroll', isFull);
+  setTimeout(() => { if(rutaMapInstance) rutaMapInstance.invalidateSize(); }, 50);
 }
 function renderModal(slug){
   const info = TOUR_INFO[currentLang][slug];
